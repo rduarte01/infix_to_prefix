@@ -1,0 +1,180 @@
+<link rel="stylesheet" href="./style.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<div class="container">
+
+  <header>
+    <h2><a class="title-h1" href="#"><i class="ion-plane"></i> TPCOMPI</a></h2>
+  </header>
+
+  <div class="cover">
+    <h1 class="title-h1" >Infijo a Prefijo sin recursiones ni loops ;)</h1>
+    <form  class="flex-form">
+      <label for="from">
+        <i class="ion-location"></i>
+      </label>
+      <input type="search" id="entrada" placeholder="Probamos si tu gramática es predictiva?" >
+      
+      <button type="button" id="probar" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+        Probar
+      </button>
+      
+    </form>
+    <div id="madeby">
+      <span>
+        Developers by <a href=""  class="title-h1" target="_blank">Jesús Roman && Rubén Duarte</a>
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Resultado</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="resultado" class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+<script>
+  
+    $("#probar").on("click",function() {
+      const bnf = new BNF();
+      bnf.E();
+      if( bnf.error != "" ){
+        document.getElementById("resultado").innerHTML = bnf.error;
+      }else if( bnf.error2 != "" ){
+        document.getElementById("resultado").innerHTML = bnf.error2;
+      }
+      else{
+        document.getElementById("resultado").innerHTML = bnf.prefix;
+      }
+    });
+
+    class BNF{
+
+      constructor(input=""){
+          this.infix= document.getElementById("entrada").value;
+          this.currentIndex=0
+          this.currentCharacter=this.infix.charAt(0)
+          this.operandsStack=[]
+          this.operatorStack=[]
+          this.precedenceOperators={
+              '^':3,
+              '*':2,
+              '/':2,
+              '*':2,
+              '+':1,
+              '-':1
+          }
+          this.prefix=''
+          this.error=""
+          this.error2=""
+      }
+
+      E(){
+          console.log(this.infix)
+          this.num();
+          this.op();
+          this.num();
+          this.T();
+
+          //sacamos todo lo queda
+          this.pop()
+          console.log(this.infix)
+      }
+
+      T(){
+          if(('^*/-+').includes(this.currentCharacter)){
+                  this.op()
+                  this.num();
+                  this.T();
+          }else return ''
+      }
+
+      num(){
+          console.log('procesingCharacter',this.currentCharacter)
+
+              let num =  this.dig() + this.contNum();
+              this.operandsStack.push(num)
+      }
+
+      contNum(){
+          console.log('procesingCharacter',this.currentCharacter)
+          if('0123456789'.includes(this.currentCharacter)){
+              return this.dig() + this.contNum();
+          }else return ''
+      }
+
+      dig(){
+          let previusCharacter=this.currentCharacter
+          this.match('0123456789')
+          return previusCharacter
+      }
+
+      op(){
+          let previusCharacter=this.currentCharacter
+          console.log('procesing ',previusCharacter)
+          this.match('^*/-+')
+          this.popAndPush(previusCharacter)
+      }
+      popAndPush(op){
+          let lastOperator=this.operatorStack[this.operatorStack.length-1]
+          while(this.precedenceOperators[op]<this.precedenceOperators[lastOperator]){
+              let operand2=this.operandsStack.pop()
+              let operand1=this.operandsStack.pop()
+              let operator=this.operatorStack.pop()
+              this.operandsStack.push(operator+operand1+operand2)
+              lastOperator=this.operatorStack[this.operatorStack.length-1]
+          }
+          this.operatorStack.push(op)
+      }
+      pop(){
+          while(this.operatorStack.length>0){
+              let operand2=this.operandsStack.pop()
+              let operand1=this.operandsStack.pop()
+              let operator=this.operatorStack.pop()
+              this.
+              operandsStack.push(operator+operand1+operand2)
+          }
+          this.prefix=this.operandsStack.pop()
+      }
+      match(input){
+          //console.log(this.currentCharacter)
+          if(this.currentCharacter=="$") this.error2="Cadena Incompleta"
+          else if(input.includes(this.currentCharacter)){
+              this.currentIndex+=1
+              if(this.currentIndex<this.infix.length){
+                  this.currentCharacter=this.infix.charAt(this.currentIndex)
+              }else{
+                  this.currentCharacter='$'
+              }
+          }else{
+              this.error="La cadena no pertenece al lenguaje";
+          }
+      }
+  }
+
+
+
+</script>
+
+
