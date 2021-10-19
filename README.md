@@ -1,12 +1,23 @@
-# BNF
 
+# TPCOMPI
+
+```
+Escribir un TDS predictivo que recibe una cadena de numeros enteros y operadores en
+forma infija basados en el siguiente el alfabeto S = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ^, +, -, /, *}
+que retorna la misma cadena pero en forma prefija.
+Ejemplo: 35 + 4^2 -1 retorna + 35 - ^4 2 1
+```
+
+## BNF
+
+```
 E		-> num P
 P		-> num op E | op num P | op num
 num 		-> dig contNum
 contNum 	-> dig contNum | vacio
 op		-> + | - | * | / | ^
 dig 		-> 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-
+```
 
 ## Como la gramática no es predictiva debido a que cuenta con factor común:
 
