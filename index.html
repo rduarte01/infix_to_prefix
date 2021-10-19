@@ -19,7 +19,7 @@
       <label for="from">
         <i class="ion-location"></i>
       </label>
-      <input type="search" id="entrada" placeholder="Probamos si tu gramática es predictiva?" >
+      <input type="search" id="entrada" placeholder="Probamos tu gramática?" >
       
       <button type="button" id="probar" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
         Probar
@@ -82,7 +82,7 @@
     class BNF{
 
       constructor(input=""){
-          this.infix= document.getElementById("entrada").value;
+          this.infix= document.getElementById("entrada").value.replace(/\s+/g, '');
           this.currentIndex=0
           this.currentCharacter=this.infix.charAt(0)
           this.operandsStack=[]
