@@ -1,16 +1,20 @@
 
 $("#probar").on("click",function() {
     const bnf = new BNF();
-    bnf.E();
-    document.getElementById("exampleModalLabel").innerHTML = "Resultado" ;
-    if( bnf.error != "" ){
-        document.getElementById("resultado").innerHTML = "Error: "+bnf.error;
-    }else if( bnf.error2 != "" ){
-        document.getElementById("resultado").innerHTML = "Error: "+ bnf.error2;
-    }
-    else{
+    try{
+        bnf.E();
         document.getElementById("resultado").innerHTML = bnf.prefix;
+
+    }catch(e){
+        document.getElementById("exampleModalLabel").innerHTML = "Resultado" ;
+        if( bnf.error != "" ){
+            document.getElementById("resultado").innerHTML = "Error: "+bnf.error;
+        }else if( bnf.error2 != "" ){
+            document.getElementById("resultado").innerHTML = "Error: "+ bnf.error2;
+        }
     }
+
+
     });
     $("#ejemplos").on("click",function() {
     document.getElementById("exampleModalLabel").innerHTML = "Te enseño ejemplos simples :)" ;

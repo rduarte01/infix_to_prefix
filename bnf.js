@@ -116,7 +116,7 @@ class BNF{
     match(input){
         if(this.input=="$") { //cadena incompleta porque ya procese todo y siguo llamando a la funcion
             this.error2="Cadena Incompleta"
-            //throw new Error('Error');
+            throw new Error('Error');
         }
         else if(this.input==input){ //entrada igual a carater esperado
             this.currentIndex+=1
@@ -127,7 +127,7 @@ class BNF{
             }
         }else{ //error, se recibe una cadena que no se espera
              this.error="La cadena no pertenece al lenguaje";
-             //throw new Error('Error');
+             throw new Error('Error');
         }
     }
   }
