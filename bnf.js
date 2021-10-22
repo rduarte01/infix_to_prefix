@@ -45,7 +45,12 @@ class BNF{
     }
 
     R(){
-        if(this.input!='$'){ //Si no es Fin de cadena, seguimos Iterando
+        if( 
+            this.input=='0' || this.input=='1' || this.input=='2' || this.input=='3' ||
+            this.input=='4' || this.input=='5' || this.input=='6' || this.input=='7' ||
+            this.input=='8' || this.input=='9' || this.input=='^' || this.input=='*' ||
+            this.input=='/' || this.input=='+' || this.input=='-'
+          ){  //Si no es Fin de cadena, seguimos Iterando
             this.P()
         }else return ""
     }
